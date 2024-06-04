@@ -1,0 +1,9 @@
+.form-container {
+    margin: 2%;
+    display: inline;
+}
+
+button {
+    width: 100%;
+    color: lightblue
+}
