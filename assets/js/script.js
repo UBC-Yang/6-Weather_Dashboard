@@ -11,7 +11,7 @@ const pastSearch = document.getElementById('search-history')
 const searchBtn = document.getElementById('search-button');
 const clearBtn = document.getElementById('clear-button');
 
-let searchHistory = JSON.parse(localStorage.getItem('search'));
+let searchHistory = JSON.parse(localStorage.getItem('search')) || [];
 
 function getWeather (cityName) {
     const requestUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIKey}`;
@@ -56,3 +56,19 @@ function getWeather (cityName) {
             })
 
 }
+
+// Store History
+searchBtn.addEventListener('click', function() {
+    const searchCity = cityEl.value;
+    getWeather(searchCity);
+    searchHistory.push(searchCity);
+    localStorage.setItem('search', JSON.stringify(searchHistory));
+    renderSearchHistory();
+})
+
+// Clear History
+clearBtn.addEventListener('click', function() {
+    localStorage.clear();
+    searchHistory = [];
+    renderSearchHistory();
+})
