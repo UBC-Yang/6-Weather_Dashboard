@@ -1,8 +1,10 @@
+/* Style for input form*/
 .form-container {
     margin: 2%;
     display: inline;
 }
 
+/* Style for buttons*/
 button {
     width: 100%;
 }

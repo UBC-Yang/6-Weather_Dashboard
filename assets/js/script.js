@@ -13,12 +13,14 @@ const clearBtn = document.getElementById('clear-button');
 
 let searchHistory = JSON.parse(localStorage.getItem('search')) || [];
 
+// Weather display function 
 function getWeather(cityName) {
     const requestUrl = `${APIBase}weather?q=${cityName}&appid=${APIKey}&units=imperial`;
 
     fetch(requestUrl)
         .then(response => response.json())
         .then(response => {
+            // Display current weather condition
             const currentDate = new Date(response.dt * 1000);
             const day = currentDate.getDate();
             const month = currentDate.getMonth() + 1;
@@ -46,7 +48,8 @@ function getForecast(cityID) {
 
             const currentDate = new Date();
 
-            for (let i = 1; i<= 5; i++) {
+            //Display 5-day forecast
+            for (let i = 1; i <= 5; i++) {
                 const forecast = response.list[i * 8 - 1];
                 const forecastDate = new Date(forecast.dt * 1000);
                 const day = forecastDate.getDate();
@@ -83,6 +86,7 @@ function getForecast(cityID) {
         });
 }
 
+// Searched city history 
 function renderSearchHistory() {
     searchHistoryEl.innerHTML = '';
     searchHistory.forEach(city => {
@@ -96,16 +100,19 @@ function renderSearchHistory() {
     });
 }
 
+// Search button function
 searchBtn.addEventListener('click', () => {
     const searchCity = cityEl.value;
     getWeather(searchCity);
     if (!searchHistory.includes(searchCity)) {
         searchHistory.push(searchCity);
         localStorage.setItem('search', JSON.stringify(searchHistory));
+        localStorage.setItem('lastSearch', searchCity); 
         renderSearchHistory();
     }
 });
 
+// Clear button function
 clearBtn.addEventListener('click', () => {
     localStorage.clear();
     searchHistory = [];
@@ -113,8 +120,21 @@ clearBtn.addEventListener('click', () => {
     clearWeatherDisplay();
 });
 
+// Weather display
 function showDiv() {
     document.getElementById('show').style.display = "block";
- }
+}
+
+// Clear weather function
+function clearWeatherDisplay() {
+    cityNameEl.innerHTML = '';
+    weatherIconEl.setAttribute('src', '');
+    weatherIconEl.setAttribute('alt', '');
+    currentTempEl.innerHTML = '';
+    currentHumidityEl.innerHTML = '';
+    currentWindEl.innerHTML = '';
+    document.getElementById('forecasts-cards-container').innerHTML = '';
+    document.getElementById('show').style.display = "none";
+}
 
 renderSearchHistory();
